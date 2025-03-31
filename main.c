@@ -3,138 +3,28 @@
 #include <time.h>
 #include <string.h>
 
-#define MAX_NOME 50
-#define NUM_PERGUNTAS 5
+void perguntaEResposta();
+void cobraNaCaixa();
+void gousmasWar();
+void menu();
 
-// Função para o minijogo Pergunta e Resposta
-void perguntaEResposta() {
-    char* perguntas[NUM_PERGUNTAS] = {
-        "Qual é a capital da França?",
-        "Quem pintou a Mona Lisa?",
-        "Qual é o maior planeta do Sistema Solar?",
-        "Quem escreveu a peça Hamlet?",
-        "Em que ano o Brasil foi descoberto?"
-    };
-    char* alternativas[NUM_PERGUNTAS][4] = {
-        {"1. Paris", "2. Londres", "3. Roma", "4. Berlim"},
-        {"1. Leonardo da Vinci", "2. Van Gogh", "3. Picasso", "4. Monet"},
-        {"1. Marte", "2. Vênus", "3. Júpiter", "4. Saturno"},
-        {"1. Shakespeare", "2. Goethe", "3. Dostoievski", "4. Tolstói"},
-        {"1. 1500", "2. 1492", "3. 1600", "4. 1450"}
-    };
-    int respostas[NUM_PERGUNTAS] = {1, 1, 3, 1, 1}; // Respostas corretas
-
-    int i, escolha;
-
-    for(i = 0; i < NUM_PERGUNTAS; i++) {
-        printf("\nPergunta %d: %s\n", i+1, perguntas[i]);
-        for(int j = 0; j < 4; j++) {
-            printf("%s\n", alternativas[i][j]);
-        }
-        printf("Escolha a resposta (1-4): ");
-        scanf("%d", &escolha);
-
-        if(escolha == respostas[i]) {
-            printf("Resposta correta!\n");
-        } else {
-            printf("Resposta incorreta. A resposta correta é: %d\n", respostas[i]);
-        }
-    }
+int main() {
+    menu();
+    return 0;
 }
 
-// Função para o minijogo Cobra na Caixa!
-void cobraNaCaixa() {
-    char* nomes[] = {"Alice", "Bob", "Charlie", "Diana", "Edward", "Fay", "Grace"};
-    int numCaixas = 5;
-    int cobra, botao;
-    int escolha, jogadorAtual;
-    char nomeJogador[MAX_NOME];
-
-    srand(time(0));
-    cobra = rand() % numCaixas;
-    botao = rand() % numCaixas;
-
-    printf("Escolha seu nome:\n");
-    for(int i = 0; i < 7; i++) {
-        printf("%d. %s\n", i+1, nomes[i]);
-    }
-    printf("Escolha o numero do jogador (1-7): ");
-    int indice;
-    scanf("%d", &indice);
-    strcpy(nomeJogador, nomes[indice - 1]);
-
-    jogadorAtual = rand() % 2;  // Sorteio de quem começa
-
-    while(1) {
-        printf("\n%s, escolha uma caixa (1-5): ", nomeJogador);
-        scanf("%d", &escolha);
-        escolha--; // Ajuste de índice
-
-        if(escolha == cobra) {
-            printf("Você encontrou a cobra! Você perdeu!\n");
-            break;
-        } else if(escolha == botao) {
-            printf("Você encontrou o botão! Você venceu!\n");
-            break;
-        } else {
-            printf("A caixa está vazia.\n");
-        }
-
-        // Troca o jogador
-        jogadorAtual = 1 - jogadorAtual;
-        printf("\nPróximo jogador...\n");
-    }
-}
-
-// Função para o minijogo Gousmas War
-void gousmasWar() {
-    int gousmasJogador1 = 2, gousmasJogador2 = 2;
-    int furia1[2] = {1, 1}, furia2[2] = {1, 1};
-    int escolha, ataque;
-
-    while(gousmasJogador1 > 0 && gousmasJogador2 > 0) {
-        printf("\nJogador 1 tem %d Gousmas e Jogador 2 tem %d Gousmas\n", gousmasJogador1, gousmasJogador2);
-        printf("Jogador 1, escolha uma Gousma para atacar (1 ou 2): ");
-        scanf("%d", &escolha);
-        printf("Jogador 2, escolha uma Gousma para atacar (1 ou 2): ");
-        scanf("%d", &ataque);
-
-        // Ataque
-        if(furia1[escolha - 1] > furia2[ataque - 1]) {
-            furia2[ataque - 1] += furia1[escolha - 1];
-            if(furia2[ataque - 1] > 5) {
-                gousmasJogador2--;
-                printf("Jogador 2 perdeu uma Gousma!\n");
-            }
-        } else {
-            furia1[escolha - 1] += furia2[ataque - 1];
-            if(furia1[escolha - 1] > 5) {
-                gousmasJogador1--;
-                printf("Jogador 1 perdeu uma Gousma!\n");
-            }
-        }
-    }
-
-    if(gousmasJogador1 == 0) {
-        printf("Jogador 2 venceu!\n");
-    } else {
-        printf("Jogador 1 venceu!\n");
-    }
-}
-
-// Função para mostrar o menu principal
 void menu() {
-    int opcao;
+    int escolha;
     do {
-        printf("\nMenu Principal:\n");
+        printf("\n=== Arcade de Minijogos ===\n");
         printf("1. Pergunta e Resposta\n");
         printf("2. Cobra na Caixa!\n");
         printf("3. Gousmas War\n");
         printf("4. Sair\n");
-        printf("Escolha uma opção: ");
-        scanf("%d", &opcao);
-
-        switch(opcao) {
+        printf("Escolha um jogo: ");
+        scanf("%d", &escolha);
+        
+        switch (escolha) {
             case 1:
                 perguntaEResposta();
                 break;
@@ -145,15 +35,118 @@ void menu() {
                 gousmasWar();
                 break;
             case 4:
-                printf("Saindo do jogo...\n");
+                printf("Saindo do arcade...\n");
                 break;
             default:
-                printf("Opção inválida! Tente novamente.\n");
+                printf("Opção inválida!\n");
         }
-    } while(opcao != 4);
+    } while (escolha != 4);
 }
 
-int main() {
-    menu();
-    return 0;
+void perguntaEResposta() {
+    char *perguntas[5] = {
+        "O que um ornitorrinco tem em comum com um réptil?\n1) Ele tem escamas\n2) Ele muda de pele\n3) Ele bota ovos\n4) Ele não tem pulmões",
+        "Qual desses filmes NÃO é da Pixar?\n1)  Toy Story\n2) Shrek\n3) Procurando Nemo\n4)  Os Incríveis",
+        "Qual dessas frutas flutua na água?\n1)Banana\n2) Melancia\n3) Uva\n4) Abacate",
+        "O que acontece se você gritar no espaço?\n1) O som se espalha normalmente\n2) O som fica mais alto\n3) Nada, porque o som não se propaga no vácuo\n4) Você perde a voz imediatamente",
+        "Se um pinguim usasse sapatos, qual seria o tamanho do pé dele?\n1) 38\n2) 42\n3) Nenhum, pinguins não precisam de sapatos\n4) 45"
+    };
+    int respostas[5] = {3, 2, 2, 3, 3};
+    int resposta, acertos = 0;
+    
+    for (int i = 0; i < 5; i++) {
+        printf("\n%s\nResposta: ", perguntas[i]);
+        scanf("%d", &resposta);
+        if (resposta == respostas[i]) {
+            printf("Correto!\n");
+            acertos++;
+        } else {
+            printf("Incorreto! A resposta certa era %d.\n", respostas[i]);
+        }
+    }
+    printf("Você acertou %d de 5 perguntas!\n", acertos);
+}
+
+void cobraNaCaixa() {
+    srand(time(NULL));
+    int botao, cobra, escolha, jogador = 0;
+    char jogadores[2][50];
+    
+    printf("Digite o nome do Jogador 1: ");
+    scanf("%s", jogadores[0]);
+    printf("Digite o nome do Jogador 2: ");
+    scanf("%s", jogadores[1]);
+    
+    do {
+        botao = rand() % 5 + 1;
+        cobra = rand() % 5 + 1;
+    } while (botao == cobra);
+    
+    while (1) {
+        printf("\n%s, escolha uma caixa (1 a 5): ", jogadores[jogador]);
+        scanf("%d", &escolha);
+        if (escolha == botao) {
+            printf("%s encontrou o botão e venceu!\n", jogadores[jogador]);
+            break;
+        } else if (escolha == cobra) {
+            printf("%s encontrou a cobra e perdeu!\n", jogadores[jogador]);
+            break;
+        } else {
+            printf("A caixa estava vazia. Próximo jogador!\n");
+            jogador = 1 - jogador;
+        }
+    }
+}
+
+void gousmasWar() {
+    int gousmas[2][2] = {{1, 1}, {1, 1}};
+    int turno = 0, escolha, ataque, origem;
+    char jogadores[2][50];
+    
+    printf("Digite o nome do Jogador 1: ");
+    scanf("%s", jogadores[0]);
+    printf("Digite o nome do Jogador 2: ");
+    scanf("%s", jogadores[1]);
+    
+    while (gousmas[0][0] + gousmas[0][1] > 0 && gousmas[1][0] + gousmas[1][1] > 0) {
+        printf("\nTurno de %s\n", jogadores[turno]);
+        printf("Suas Gousmas: Esquerda (%d), Direita (%d)\n", gousmas[turno][0], gousmas[turno][1]);
+        printf("1. Atacar\n2. Dividir Gousma\nEscolha: ");
+        scanf("%d", &escolha);
+        
+        if (escolha == 1) {
+            printf("Escolha com qual Gousma atacar (1-Esquerda, 2-Direita): ");
+            scanf("%d", &origem);
+            if (gousmas[turno][origem - 1] > 0) {
+                printf("Escolha qual Gousma inimiga atacar (1-Esquerda, 2-Direita): ");
+                scanf("%d", &ataque);
+                gousmas[1 - turno][ataque - 1] += gousmas[turno][origem - 1];
+                gousmas[turno][origem - 1] = 0;
+            } else {
+                printf("Essa Gousma não pode atacar pois está zerada!\n");
+            }
+        } else if (escolha == 2) {
+            printf("Escolha qual Gousma dividir (1-Esquerda, 2-Direita): ");
+            scanf("%d", &origem);
+            if (gousmas[turno][origem - 1] > 1) {
+                int metade = gousmas[turno][origem - 1] / 2;
+                gousmas[turno][origem - 1] -= metade;
+                gousmas[turno][1 - (origem - 1)] += metade;
+            } else {
+                printf("Essa Gousma não pode ser dividida!\n");
+            }
+        }
+        
+        for (int i = 0; i < 2; i++) {
+            if (gousmas[0][i] > 5) gousmas[0][i] = 0;
+            if (gousmas[1][i] > 5) gousmas[1][i] = 0;
+        }
+        
+        if (gousmas[turno][0] + gousmas[turno][1] == 0) {
+            printf("%s perdeu todas as Gousmas! %s venceu!\n", jogadores[turno], jogadores[1 - turno]);
+            break;
+        }
+        
+        turno = 1 - turno;
+    }
 }
